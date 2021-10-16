@@ -6,8 +6,10 @@
         <entry key="app/src/main/res/drawable/receive_bg.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/sent_bg.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_feeds.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1953125" />
+        <entry key="app/src/main/res/layout/event_row.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/user_view.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/view_receive.xml" value="0.33" />
         <entry key="app/src/main/res/layout/view_sent.xml" value="0.22" />
