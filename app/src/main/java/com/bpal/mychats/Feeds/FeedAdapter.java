@@ -62,5 +62,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         viewHolder.data.setText(data.getData());
 
         notifyItemInserted(i);
+        notifyItemRangeChanged(i, items.size());
     }
 }
