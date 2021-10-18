@@ -22,6 +22,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.Pusher;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -32,6 +37,39 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Const {
+
+    //pusher feeds
+    public static final String APP_KEY = "040996f203fbba0bd2d1";
+    public static final String APP_ID = "1282169";
+    public static final String APP_SECRET = "08c386b919c93451d7f4";
+    public static final String CHANNEL_NAME = "brijesh-development";
+    public static final String EVENT_NAME = "feeds";
+    public static final String APP_CLUSTER = "ap2";
+    public static String SOCKET_ID = "";
+
+    public static Pusher getFeedsPusher(){
+        PusherOptions options = new PusherOptions();
+        options.setCluster(APP_CLUSTER);
+        Pusher pusher = new Pusher(APP_KEY, options);
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                SOCKET_ID = getFeedsPusher().getConnection().getSocketId();
+                Log.i("Pusher", "State changed from " + change.getPreviousState() +
+                        " to " + change.getCurrentState());
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.i("Pusher", "There was a problem connecting! " +
+                        "\ncode: " + code +
+                        "\nmessage: " + message +
+                        "\nException: " + e
+                );
+            }
+        }, ConnectionState.ALL);
+        return pusher;
+    }
 
     public static DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT);
     public static DatabaseReference rootUserRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT).child(ConstFire.USER);

@@ -7,4 +7,5 @@ public class ConstFire {
     public static final String CHATS = "Chats";
     public static final String MESSAGES = "Messages";
     public static final String TOKEN = "Tokens";
+    public static final String FEEDS = "Feeds";
 }

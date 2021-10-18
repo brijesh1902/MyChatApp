@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bpal.mychats.R;
+import com.bpal.mychats.Utils.Const;
 import com.bpal.mychats.databinding.EventRowBinding;
-import com.github.curioustechizen.ago.RelativeTimeTextView;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
     private List<Event> items;
     Context context;
+    String time;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         EventRowBinding binding;
@@ -33,9 +34,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         }
     }
 
-    public FeedAdapter(Context c, List<Event> item) {
+    public FeedAdapter(Context c, List<Event> item, String time) {
         this.context = c;
         this.items = item;
+        this.time = time;
     }
 
     @Override
@@ -58,10 +60,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         viewHolder.event.setText(data.getEvent());
         viewHolder.channel.setText(data.getChannel());
-        viewHolder.timestamp.setText((int) System.currentTimeMillis());
-        viewHolder.data.setText(data.getData());
+        viewHolder.data.setText("Message: "+data.getData());
 
-        notifyItemInserted(i);
-        notifyItemRangeChanged(i, items.size());
+        if (time!=null)
+            viewHolder.timestamp.setText(Const.DateTime(Long.valueOf(time)));
+
     }
 }
