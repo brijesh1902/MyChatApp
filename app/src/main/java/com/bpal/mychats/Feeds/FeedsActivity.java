@@ -7,10 +7,19 @@ import static com.bpal.mychats.Utils.Const.APP_SECRET;
 import static com.bpal.mychats.Utils.Const.CHANNEL_NAME;
 import static com.bpal.mychats.Utils.Const.EVENT_NAME;
 import static com.bpal.mychats.Utils.Const.SOCKET_ID;
+import static com.bpal.mychats.Utils.Const.USERNAME;
 import static com.bpal.mychats.Utils.Const.getFeedsPusher;
 import static com.bpal.mychats.Utils.Const.rootRef;
 import static com.bpal.mychats.Utils.Const.showToast;
+import static com.bpal.mychats.Utils.ConstFire.FEEDS;
 
+import static org.asynchttpclient.Dsl.config;
+import static org.asynchttpclient.Dsl.proxyServer;
+
+import static java.util.Collections.singleton;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,11 +37,20 @@ import com.bpal.mychats.databinding.ActivityFeedsBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.ChannelEventListener;
+import com.pusher.client.channel.PrivateChannel;
+import com.pusher.client.channel.PrivateChannelEventListener;
 import com.pusher.client.channel.PusherEvent;
 import com.pusher.client.channel.SubscriptionEventListener;
-import com.pusher.rest.Pusher;
+import com.pusher.client.Pusher;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.client.util.HttpAuthorizer;
+import com.pusher.rest.PusherAsync;
+import com.pusher.rest.data.Result;
 
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -53,8 +71,11 @@ public class FeedsActivity extends AppCompatActivity {
     List<Event> eventList;
     RecyclerView recyclerView;
     SharedPreferences preferences;
-    String time = null, message, data;
+    String time = null, message, username;
     Pusher pusher;
+    PrivateChannel privateChannel;
+    Channel channel;
+    PusherOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,75 +86,29 @@ public class FeedsActivity extends AppCompatActivity {
         preferences = getSharedPreferences(CHANNEL, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        binding.textView.setText("Feeds");
+        username = getIntent().getStringExtra(USERNAME);
+
+        binding.textView.setText(username+" Feeds (Me)");
         recyclerView = findViewById(R.id.rvfeed);
+
+        eventList = new ArrayList<>();
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(false);
 
-        getFeeds();
-
-        setFeeds();
-
-    }
-
-    private void setFeeds() {
-        pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET);
-        //Pusher pusher = new Pusher("http://"+APIKEY+":"+APISECRET+"@api-"+APICLUSTER+".pusher.com/apps/app_id");
-        pusher.setCluster(APP_CLUSTER);
-        pusher.setEncrypted(true);
-        pusher.setHost("api-"+APP_CLUSTER+".pusher.com");
-
-        HttpClientBuilder builder = Pusher.defaultHttpClientBuilder();
-        builder.setProxy(new HttpHost("proxy.example.com"));
-        pusher.configureHttpClient(builder);
-
-        binding.send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                message = binding.edMsg.getText().toString();
-                if (message.isEmpty()){
-                    showToast(getApplicationContext(), "Comment is required!");
-                } else {
-                 try {
-                      pusher.trigger(CHANNEL_NAME, EVENT_NAME, Collections.singletonMap("message", "hello world"), SOCKET_ID);
-                      showToast(getApplicationContext(), "Comment is sent.");
-                      binding.edMsg.setText("");
-                  } catch (Exception e){
-                      e.printStackTrace();
-                  }
-                }
-            }
-        });
-
-    }
-
-    private void getFeeds() {
-
-        Channel channel = getFeedsPusher().subscribe(CHANNEL_NAME);
-
-        channel.bind(EVENT_NAME, new SubscriptionEventListener() {
-            @Override
-            public void onEvent(PusherEvent e) {
-                Log.i("Pusher", "Received event with data:======== " + e.getChannelName()+"; "+e.getEventName() +"; " +e.getData());
-                Event data = new Event(e.getChannelName(), e.getEventName(), e.getData());
-                rootRef.child(ConstFire.FEEDS).child(String.valueOf(System.currentTimeMillis())).setValue(data);
-                Log.i("Pusher", "Received event with data:======== " + preferences.getString(CHANNEL, null));
-            }
-        });
-
-        rootRef.child(ConstFire.FEEDS).addValueEventListener(new ValueEventListener() {
+        rootRef.child(FEEDS).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    eventList = new ArrayList<>();
                     for (DataSnapshot snap : snapshot.getChildren()){
                         Event event = snap.getValue(Event.class);
                         time = snap.getKey();
                         eventList.add(event);
                     }
                     adapter = new FeedAdapter(getApplicationContext(), eventList, time);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeChanged(adapter.getItemCount(), eventList.size());
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -145,13 +120,99 @@ public class FeedsActivity extends AppCompatActivity {
         });
 
 
+        options = new PusherOptions();
+        options.setCluster(APP_CLUSTER);
+        options.setEncrypted(true);
+
+        HttpAuthorizer authorizer = new HttpAuthorizer("https://frozen-caverns-77981.herokuapp.com/pusher/auth");
+        options.setAuthorizer(authorizer);
+
+        pusher = new Pusher(APP_KEY, options);
+
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                if (change.getCurrentState() == ConnectionState.CONNECTED) {
+                    Log.i("Pusher", "State changed from " + change.getPreviousState() +
+                            " to " + change.getCurrentState()+"; "+SOCKET_ID);
+                    SOCKET_ID = pusher.getConnection().getSocketId();
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.i("Pusher", "There was a problem connecting! " +
+                        "\ncode: " + code +
+                        "\nmessage: " + message +
+                        "\nException: " + e
+                );
+            }
+        }, ConnectionState.ALL);
+
+        privateChannel = pusher.subscribePrivate( CHANNEL_NAME, new PrivateChannelEventListener() {
+            @Override
+            public void onAuthenticationFailure(String message, Exception e) {
+                Log.i("Pusher", "onAuthenticationFailure:======== " + message+"; "+e.toString());
+            }
+
+            @Override
+            public void onSubscriptionSucceeded(String channelName) {
+                authorizer.authorize("private-feed", SOCKET_ID);
+                Log.i("Pusher", "onSubscriptionSucceeded:======== " + channelName);
+                showToast(getApplicationContext(), "Subscription Successful to "+channelName, FeedsActivity.this);
+                setFeeds();
+            }
+
+            @Override
+            public void onEvent(PusherEvent event) {
+
+            }
+        });
+
+        channel = pusher.subscribe("feed");
+        channel.bind(EVENT_NAME, new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                Log.i("Pusher", "Received event with data:======== " + event.toString());
+                getFeeds(event);
+            }
+        });
+
     }
 
-    class SendFeedTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
+    private void setFeeds() {
+        binding.send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                message = binding.edMsg.getText().toString();
+                if (message.isEmpty()){
+                    showToast(getApplicationContext(), "Comment is required!", FeedsActivity.this);
+                } else {
+                    try {
+                       // privateChannel.trigger(EVENT_NAME, String.valueOf(Collections.<String>singleton("event=feeds, data=" + message + ", channel=feed")));
+                        Event data = new Event(username, EVENT_NAME, message);
+                        privateChannel.trigger(EVENT_NAME, String.valueOf(data));
+                        showToast(getApplicationContext(), "Comment: "+message+" is sent.", FeedsActivity.this);
+                        binding.edMsg.setText("");
+                        rootRef.child(FEEDS).child(String.valueOf(System.currentTimeMillis())).setValue(data);
+                        Log.i("Pusher", "onEvent:======== " + message+"==="+username);
 
-            return "";
-        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    private void getFeeds(PusherEvent e) {
+
+        Log.i("Pusher", "Received event with data:======== " + e.getChannelName()+"; "+e.getEventName() +"; " +e.getData());
+        Event data = new Event(e.getChannelName(), e.getEventName(), e.getData());
+        rootRef.child(FEEDS).child(String.valueOf(System.currentTimeMillis())).setValue(data);
+
     }
 }

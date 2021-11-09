@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bpal.mychats.Adapters.ChatAdapter;
+import com.bpal.mychats.Feeds.FeedsActivity;
 import com.bpal.mychats.Models.Messages;
 import com.bpal.mychats.Models.User;
 import com.bpal.mychats.R;
@@ -69,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
                 Message = message.getText().toString();
 
                 if (Message.isEmpty()) {
-                    Const.showToast(getApplicationContext(), "Please enter a message!");
+                    Const.showToast(getApplicationContext(), "Please enter a message!", ChatActivity.this);
                 } else {
 
                     id = Sreference.child(time).push().getKey();

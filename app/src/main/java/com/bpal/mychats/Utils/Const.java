@@ -2,6 +2,7 @@ package com.bpal.mychats.Utils;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -27,8 +28,13 @@ import com.pusher.client.Pusher;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.client.util.HttpAuthorizer;
+
+import org.apache.http.HttpHost;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -39,17 +45,21 @@ import retrofit2.Response;
 public class Const {
 
     //pusher feeds
-    public static final String APP_KEY = "040996f203fbba0bd2d1";
-    public static final String APP_ID = "1282169";
-    public static final String APP_SECRET = "08c386b919c93451d7f4";
-    public static final String CHANNEL_NAME = "brijesh-development";
-    public static final String EVENT_NAME = "feeds";
+    public static final String APP_ID = "1282171";
+    public static final String APP_KEY = "907ceb1ecaad645b30af";
+    public static final String APP_SECRET = "b4bb267f40a1914d14ff";
+    public static final String CHANNEL_NAME = "private-feed";
+    public static final String EVENT_NAME = "client-feeds";
     public static final String APP_CLUSTER = "ap2";
+    public static final String USERNAME = "Username";
     public static String SOCKET_ID = "";
 
     public static Pusher getFeedsPusher(){
         PusherOptions options = new PusherOptions();
+        HttpAuthorizer authorizer = new HttpAuthorizer("https://frozen-caverns-77981.herokuapp.com/pusher/auth");
         options.setCluster(APP_CLUSTER);
+        options.setEncrypted(true);
+        options.setAuthorizer(authorizer);
         Pusher pusher = new Pusher(APP_KEY, options);
         pusher.connect(new ConnectionEventListener() {
             @Override
@@ -70,6 +80,16 @@ public class Const {
         }, ConnectionState.ALL);
         return pusher;
     }
+
+   /* public static Pusher getRestPusher(){
+        Pusher pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET);
+        //Pusher pusher = new Pusher("http://"+APP_KEY+":"+APP_SECRET+"@api-"+APP_CLUSTER+".pusher.com/apps/"+APP_ID);
+        pusher.setCluster("ap2");
+        pusher.setEncrypted(true);
+        pusher.setHost("api-ap2.pusher.com");
+
+        return pusher;
+    }*/
 
     public static DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT);
     public static DatabaseReference rootUserRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT).child(ConstFire.USER);
@@ -135,7 +155,12 @@ public class Const {
         return date;
     }
 
-    public static void showToast(Context context, String s) {
-        Toast.makeText(context, s, LENGTH_SHORT).show();
+    public static void showToast(Context context, String s, Activity activity) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(context, s, LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

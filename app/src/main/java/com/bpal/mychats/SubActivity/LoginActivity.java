@@ -79,14 +79,14 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
-                                    Const.showToast(getApplicationContext(), "Logged in successfully.");
+                                    Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
                                 } else {
                                     progressDialog.dismiss();
-                                    Const.showToast(getApplicationContext(), "Wrong Password!");
+                                    Const.showToast(getApplicationContext(), "Wrong Password!", LoginActivity.this);
                                 }
                             } else {
                                 progressDialog.dismiss();
-                                Const.showToast(getApplicationContext(), "Wrong Username!");
+                                Const.showToast(getApplicationContext(), "Wrong Username!", LoginActivity.this);
                             }
                         } else {
                             progressDialog.setCanceledOnTouchOutside(false);
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
-                                    Const.showToast(getApplicationContext(), "Logged in successfully.");
+                                    Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
                                 }
                             });
                         }
