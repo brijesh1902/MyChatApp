@@ -1,14 +1,14 @@
 package com.bpal.mychats.Services;
 
-public class Notification {
+public class Notifications {
 
     public String body, title;
 
-    public Notification() {
+    public Notifications() {
 
     }
 
-    public Notification(String title, String body) {
+    public Notifications(String title, String body) {
         this.body = body;
         this.title = title;
     }
@@ -28,4 +28,5 @@ public class Notification {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

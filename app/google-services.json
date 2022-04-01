@@ -1,153 +1,42 @@
 {
   "project_info": {
-    "project_number": "908938557252",
-    "firebase_url": "https://note-app-e57c1-default-rtdb.firebaseio.com",
-    "project_id": "note-app-e57c1",
-    "storage_bucket": "note-app-e57c1.appspot.com"
+    "project_number": "20267297384",
+    "firebase_url": "https://tctalcoholshop.firebaseio.com",
+    "project_id": "tctalcoholshop",
+    "storage_bucket": "tctalcoholshop.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:908938557252:android:518572529ec9938e0b0911",
-        "android_client_info": {
-          "package_name": "com.bpal.feesmanagement"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "908938557252-8f9t5uj0k83ovk15arq3lev2k9bmcufj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.bpal.feesmanagement",
-            "certificate_hash": "c0b52d299ae40e823114e9706dd33292a8593df8"
-          }
-        },
-        {
-          "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDjbhF4Py0WLGzHjYpyMB5ThBQHxnIRD7Y"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:908938557252:android:ed31efb3706d41b80b0911",
+        "mobilesdk_app_id": "1:20267297384:android:e41cc687231c39a51a69dd",
         "android_client_info": {
           "package_name": "com.bpal.mychats"
         }
       },
       "oauth_client": [
         {
-          "client_id": "908938557252-lgd8c77u1i6h1gascv05lngk6j1svunb.apps.googleusercontent.com",
+          "client_id": "20267297384-4gbc8b4djdoac750cbsaa4rkb3g4hvui.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.bpal.mychats",
-            "certificate_hash": "47df9d2ed6b0c7f3ba8df4424a2940efb4c10c4a"
+            "certificate_hash": "00f91171cfb9235549cd3482e11d7b69172beb60"
           }
         },
         {
-          "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
+          "client_id": "20267297384-5o4fo4drt63earttv1adkdvg3kfm5raj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDjbhF4Py0WLGzHjYpyMB5ThBQHxnIRD7Y"
+          "current_key": "AIzaSyBL1zGcIXoild6yleSBMOzSgvrjwdGOZFE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:908938557252:android:ed6c3976943a0f750b0911",
-        "android_client_info": {
-          "package_name": "com.bpal.noteapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "908938557252-ab92ln6qvq7mkrues3q5o3fomvg6ht56.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.bpal.noteapp",
-            "certificate_hash": "61bc66f4f7728d62a9856155255041d0bcf325af"
-          }
-        },
-        {
-          "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDjbhF4Py0WLGzHjYpyMB5ThBQHxnIRD7Y"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:908938557252:android:f326d0b584609bd00b0911",
-        "android_client_info": {
-          "package_name": "com.example.homewallpaper"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "908938557252-f1ia3c53ddi58jktdkl1l30glkv18vdk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.homewallpaper",
-            "certificate_hash": "47df9d2ed6b0c7f3ba8df4424a2940efb4c10c4a"
-          }
-        },
-        {
-          "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDjbhF4Py0WLGzHjYpyMB5ThBQHxnIRD7Y"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "908938557252-3g1pv6rhd693bduhko94qrc25aqd3ntq.apps.googleusercontent.com",
+              "client_id": "20267297384-5o4fo4drt63earttv1adkdvg3kfm5raj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

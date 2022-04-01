@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "String", "BASE_FCM_KEY", '"AAAA06D1t0Q:APA91bHUTDgNtl0A0xtm7CyDSsHBO3CdPjIYd1t3S-Xxdmb3orIOt7Wq7KWHxlurYGJaNGcyAyAiiWN_cTIX0pGDVRHoY3lTHTqFe1LvLLHWehRHp27xU4nH3_zagRZOxY2ud8qOse6x"'
+        buildConfigField "String", "BASE_FCM_KEY", '"AAAABLgGamg:APA91bFlHMRSS98xAVkHO9-Ds1ZKaIWqXowqcHFTW1fRTJi1Ae_CaX9JtQOvlDhhG9Hz1iSFWT6EKpwA05d5hKiXxW86y8YbpYxM-Z8NcKkrBcTWfWeNEMT1uGZeTqPDiFULGgoAKpIV"'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,18 +41,18 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //firebase
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.google.firebase:firebase-storage:20.0.0'
-    implementation 'com.google.firebase:firebase-database:20.0.2'
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:23.0.2'
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-database:20.0.4'
+    implementation 'com.google.firebase:firebase-auth:21.0.3'
 
     //API
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -64,15 +64,10 @@ dependencies {
     //implementation 'com.pusher:pusher-websocket-java:1.0.0'
     //implementation 'com.pusher:pusher-http-java:1.3.0'
     implementation 'com.pusher:pusher-http-java:1.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
-    //noinspection DuplicatePlatformClasses
-    implementation 'org.apache.httpcomponents:httpclient:4.3.5'
-    api 'org.apache.httpcomponents:httpcore:4.4.13'
-    api 'org.apache.httpcomponents:httpmime:4.5.6'
-
-    implementation 'com.codepath.libraries:asynchttpclient:2.1.1'
+    implementation 'io.github.pilgr:paperdb:2.7.2'
 
 
 }

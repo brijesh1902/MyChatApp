@@ -2,14 +2,14 @@ package com.bpal.mychats.Services;
 
 public class Sender {
     public String to;
-    public Notification notification;
+    public Notifications notifications;
 
     public Sender() {
     }
 
-    public Sender(String to, Notification notification) {
+    public Sender(String to, Notifications notifications) {
         this.to = to;
-        this.notification = notification;
+        this.notifications = notifications;
     }
 
     public String getTo() {
@@ -20,11 +20,11 @@ public class Sender {
         this.to = to;
     }
 
-    public Notification getNotification() {
-        return notification;
+    public Notifications getNotification() {
+        return notifications;
     }
 
-    public void setNotification(Notification notification) {
-        this.notification = notification;
+    public void setNotification(Notifications notifications) {
+        this.notifications = notifications;
     }
 }

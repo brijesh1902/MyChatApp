@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.bpal.mychats.Models.User;
 import com.bpal.mychats.Services.APIService;
 import com.bpal.mychats.Services.MyResponse;
-import com.bpal.mychats.Services.Notification;
+import com.bpal.mychats.Services.Notifications;
 import com.bpal.mychats.Services.RetrofitClient;
 import com.bpal.mychats.Services.Sender;
 import com.bpal.mychats.Services.Token;
@@ -30,11 +30,7 @@ import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 import com.pusher.client.util.HttpAuthorizer;
 
-import org.apache.http.HttpHost;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -116,9 +112,8 @@ public class Const {
                 if (snapshot.exists()) {
                   for (DataSnapshot snap : snapshot.getChildren()) {
                       Token token = snap.getValue(Token.class);
-                      Log.d("===KEY1====", snap.getValue().toString());
-                      Notification notification = new Notification("My Chats App", message);
-                      Sender sender = new Sender(Objects.requireNonNull(token).getToken(), notification);
+                      Notifications notifications = new Notifications("Chat App", message);
+                      Sender sender = new Sender(Objects.requireNonNull(token).getToken(), notifications);
                       getFCMService().sendNotification(sender).enqueue(new Callback<MyResponse>() {
                           @Override
                           public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {

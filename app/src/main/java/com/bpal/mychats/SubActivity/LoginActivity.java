@@ -46,75 +46,72 @@ public class LoginActivity extends AppCompatActivity {
         pass = findViewById(R.id.pass);
         btnlogin = findViewById(R.id.btnlogin);
 
-        btnlogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Name = name.getText().toString();
-                Password = pass.getText().toString();
+        btnlogin.setOnClickListener(view -> {
+            Name = name.getText().toString();
+            Password = pass.getText().toString();
 
-                if (Name.isEmpty()) {
-                    name.setError("Name is required!");
-                    name.requestFocus();
-                    return;
-                }
+            if (Name.isEmpty()) {
+                name.setError("Name is required!");
+                name.requestFocus();
+                return;
+            }
 
-                if (Password.isEmpty()) {
-                    pass.setError("Password is required!");
-                    pass.requestFocus();
-                    return;
-                }
+            if (Password.isEmpty()) {
+                pass.setError("Password is required!");
+                pass.requestFocus();
+                return;
+            }
 
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.child(Name).exists()){
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.setMessage("Logging In...");
-                            progressDialog.show();
-                            User user = snapshot.child(Name).getValue(User.class);
-                            if (Name.equals(user.getName())) {
-                                if (Password.equals(user.getPassword())) {
-                                    progressDialog.dismiss();
-                                    Const.currentUser = user;
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
-                                } else {
-                                    progressDialog.dismiss();
-                                    Const.showToast(getApplicationContext(), "Wrong Password!", LoginActivity.this);
-                                }
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child(Name).exists()){
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setMessage("Logging In...");
+                        progressDialog.show();
+                        User user = snapshot.child(Name).getValue(User.class);
+                        if (Name.equals(user.getName())) {
+                            if (Password.equals(user.getPassword())) {
+                                progressDialog.dismiss();
+                                Const.currentUser = user;
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
                             } else {
                                 progressDialog.dismiss();
-                                Const.showToast(getApplicationContext(), "Wrong Username!", LoginActivity.this);
+                                Const.showToast(getApplicationContext(), "Wrong Password!", LoginActivity.this);
                             }
                         } else {
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.setMessage("Registering & Logging In...");
-                            progressDialog.show();
-                            Const.rootAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    progressDialog.dismiss();
-                                    User user = new User(Name, Password, authResult.getUser().getUid());
-                                    reference.child(Name).setValue(user);
-                                    Const.currentUser = user;
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
-                                }
-                            });
+                            progressDialog.dismiss();
+                            Const.showToast(getApplicationContext(), "Wrong Username!", LoginActivity.this);
                         }
+                    } else {
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setMessage("Registering & Logging In...");
+                        progressDialog.show();
+                        Const.rootAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                progressDialog.dismiss();
+                                User user = new User(Name, Password, authResult.getUser().getUid());
+                                reference.child(Name).setValue(user);
+                                Const.currentUser = user;
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                Const.showToast(getApplicationContext(), "Logged in successfully.", LoginActivity.this);
+                            }
+                        });
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                }
+            });
 
-            }
         });
 
     }

@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bpal.mychats">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_send_24"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_send_24"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChats"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+
+        <activity android:name=".SubActivity.SecondActivity" />
+
+        <activity android:name=".SubActivity.ChatActivity" android:exported="false"/>
         <activity
-            android:name=".Feeds.SecondActivity"
-            android:exported="true" >
+            android:name=".SubActivity.LoginActivity" />
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Feeds.FeedsActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".SubActivity.ChatActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name=".SubActivity.LoginActivity"
-            android:exported="true"></activity>
-        <activity android:name=".MainActivity" />
 
-        <service
-            android:name=".Services.FirebaseMessaging"
-            android:exported="true">
+        <service android:name=".Services.firebaseMessaging" android:enabled="true"
+            android:exported="false">
             <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
