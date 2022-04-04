@@ -2,6 +2,7 @@ package com.bpal.mychats.SubActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
 
     TextView name;
     EditText message;
-    ImageButton send;
+    CardView send;
     User chatUser = Const.ChatUser;
     User currentUser = Const.currentUser;
     RecyclerView recyclerView;
@@ -76,8 +77,8 @@ public class ChatActivity extends AppCompatActivity {
         senderID = currentUser.getUid();
         receiverID = chatUser.getUid();
 
-        Sreference = Const.rootChatRef.child(senderID).child(ConstFire.MESSAGES);
-        Rreference = Const.rootChatRef.child(receiverID).child(ConstFire.MESSAGES);
+        Sreference = Const.rootChatRef.child(senderID).child(receiverID).child(ConstFire.MESSAGES);
+        Rreference = Const.rootChatRef.child(receiverID).child(senderID).child(ConstFire.MESSAGES);
 
         layoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) layoutManager).setStackFromEnd(true);
@@ -87,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         setMessageAdapter();
 
         send.setOnClickListener(view -> {
-            Message = message.getText().toString();
+            Message = message.getText().toString().trim();
 
             if (Message.isEmpty()) {
                 Const.showToast(getApplicationContext(), "Please enter a message!", ChatActivity.this);
@@ -111,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setMessageAdapter() {
 
-        Const.rootChatRef.child(senderID).child(ConstFire.MESSAGES)
+        Const.rootChatRef.child(senderID).child(receiverID).child(ConstFire.MESSAGES)
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

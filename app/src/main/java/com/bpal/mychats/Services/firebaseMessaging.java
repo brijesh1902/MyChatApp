@@ -26,7 +26,8 @@ public class firebaseMessaging extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::generateToken);
+        if (user != null)
+            FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::generateToken);
     }
 
     private void generateToken(String token) {
@@ -44,7 +45,7 @@ public class firebaseMessaging extends FirebaseMessagingService {
     private void sendNotification(RemoteMessage remoteMessage) {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-
+        Log.e( "sendNotification: ", notification.getBody()+"\n"+notification.getTitle() );
         if (notification != null) {
 
             resultIntent = new Intent(this, MainActivity.class);

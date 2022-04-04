@@ -77,16 +77,6 @@ public class Const {
         return pusher;
     }
 
-   /* public static Pusher getRestPusher(){
-        Pusher pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET);
-        //Pusher pusher = new Pusher("http://"+APP_KEY+":"+APP_SECRET+"@api-"+APP_CLUSTER+".pusher.com/apps/"+APP_ID);
-        pusher.setCluster("ap2");
-        pusher.setEncrypted(true);
-        pusher.setHost("api-ap2.pusher.com");
-
-        return pusher;
-    }*/
-
     public static DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT);
     public static DatabaseReference rootUserRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT).child(ConstFire.USER);
     public static DatabaseReference rootChatRef = FirebaseDatabase.getInstance().getReference(ConstFire.ROOT).child(ConstFire.CHATS);
@@ -105,15 +95,14 @@ public class Const {
 
 
     public static void sendNotification(String receiverID, String message, Context context){
-        tokenRef.child(receiverID);
-        tokenRef.addValueEventListener(new ValueEventListener() {
+        tokenRef.child(receiverID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                  for (DataSnapshot snap : snapshot.getChildren()) {
-                      Token token = snap.getValue(Token.class);
+                      Token token = snapshot.getValue(Token.class);
+                    Log.e( "onDataChange: ", token.getToken()+"   "+token.getUid());
                       Notifications notifications = new Notifications("Chat App", message);
-                      Sender sender = new Sender(Objects.requireNonNull(token).getToken(), notifications);
+                      Sender sender = new Sender(token != null ? token.getToken() : null, notifications);
                       getFCMService().sendNotification(sender).enqueue(new Callback<MyResponse>() {
                           @Override
                           public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
@@ -133,7 +122,6 @@ public class Const {
                           }
                       });
                   }
-                }
             }
 
             @Override
